@@ -10,6 +10,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>spring-properties-refresh</module>
+        <module>spring-bean-refresh</module>
     </modules>
     <properties>
         <java.version>11</java.version>
