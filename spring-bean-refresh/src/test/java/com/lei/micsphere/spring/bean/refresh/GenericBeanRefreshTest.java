@@ -13,6 +13,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Properties;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -39,16 +44,19 @@ public class GenericBeanRefreshTest {
     private ConfigurableApplicationContext applicationContext;
 
     @Test
-    public void test() throws InterruptedException {
+    public void test() throws InterruptedException, IOException {
         assertNotNull(user);
         assertEquals(user.username, "xx");
         assertEquals(user.age, 10);
         assertEquals(genericBeanRefreshTestConfiguration.getUsername(), "xx");
 
-        // 手动修改 genericBean.properties
-        // 需要手动保存下
-        // xx -> yy
-        System.out.println("修改classpath:/genericBean.properties配置");
+        // 修改properties，xx->yy
+        // 修改配置文件
+        Properties properties = new Properties();
+        String filePath = GenericBeanEnvironmentPostProcessor.filePath.replace("file:", "");
+        properties.load(new FileInputStream(filePath));
+        properties.put("test.user.name", "yy");
+        properties.store(new FileOutputStream(filePath), properties.toString());
 
         // 发布refresh事件
         RefreshEvent refreshEvent = new RefreshEvent(this, null, null);
@@ -62,6 +70,9 @@ public class GenericBeanRefreshTest {
         // 需要主动消费 EnvironmentChangeEvent 事件
         assertEquals(user.username, "xx");
 
+        // 还原
+        properties.put("test.user.name", "xx");
+        properties.store(new FileOutputStream(filePath), properties.toString());
     }
 
 

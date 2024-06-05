@@ -20,7 +20,7 @@ import java.io.IOException;
  * @author 伍磊
  */
 public class GenericBeanEnvironmentPostProcessor implements EnvironmentPostProcessor, Ordered {
-    private String filePath = "file:/Users/wulei/IdeaProjects/personal/spring-refresh/spring-bean-refresh/src/test/java/com/lei/micsphere/spring/bean/refresh/genericBean.properties";
+    public static final String filePath = "file:/Users/wulei/IdeaProjects/personal/spring-refresh/spring-bean-refresh/src/test/java/com/lei/micsphere/spring/bean/refresh/genericBean.properties";
 
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
